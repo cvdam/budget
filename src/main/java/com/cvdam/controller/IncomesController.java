@@ -2,6 +2,7 @@ package com.cvdam.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,9 +48,22 @@ public class IncomesController {
 	}
 	
 	@GetMapping
-	public List<IncomeDto> listAllIncomes(){
+	public List<IncomeDto> readAllIncomes(){
 		List<Income> incomes = incomeRepository.findAll();
 		return IncomeDto.convert(incomes);
+	}
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<IncomeDto> readIncome(@PathVariable Long id) {
+		
+		Optional<Income> income = incomeRepository.findById(id);
+		
+		if (income.isPresent()) {
+			return ResponseEntity.ok(new IncomeDto(income.get()));
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 }
