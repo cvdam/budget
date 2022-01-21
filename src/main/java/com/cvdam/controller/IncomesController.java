@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +81,19 @@ public class IncomesController {
 			Income incomeUpdateData = form.update(id,incomeRepository);
 			incomeRepository.save(incomeUpdateData);
 			return ResponseEntity.ok(new IncomeDto(incomeUpdateData));
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<IncomeDto> deleteIncome(@PathVariable Long id){
+		
+		Optional<Income> income = incomeRepository.findById(id);
+		
+		if(income.isPresent()) {
+			incomeRepository.deleteById(id);
+			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
