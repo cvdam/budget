@@ -1,0 +1,1 @@
+INSERT INTO INCOME(description,create_date, value) values ('test','2022-01-01 19:00:00', '12345')
