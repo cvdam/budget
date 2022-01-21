@@ -54,5 +54,9 @@ public class IncomeDto {
 		this.createDate = createDate;
 	}
 	
+	public static List<IncomeDto> convert(List<Income> incomes) {
+		
+		return incomes.stream().map(IncomeDto::new).collect(Collectors.toList());
+	}	
 
 }
