@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.cvdam.controller.dto.IncomeDto;
 import com.cvdam.controller.form.IncomeForm;
+import com.cvdam.controller.form.IncomeFormUpdate;
 import com.cvdam.model.Income;
 import com.cvdam.repository.IncomeRepository;
 
@@ -31,6 +34,7 @@ public class IncomesController {
 	private IncomeRepository incomeRepository;
 	
 	@PostMapping
+	@Transactional
 	public ResponseEntity<IncomeDto> createIncome(@RequestBody @Valid IncomeForm form, UriComponentsBuilder uriBuilder){
 		
 		Income income = form.convert(incomeRepository);
@@ -63,6 +67,20 @@ public class IncomesController {
 			return ResponseEntity.ok(new IncomeDto(income.get()));
 		}
 		
+		return ResponseEntity.notFound().build();
+	}
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<IncomeDto> updateIncome(@PathVariable Long id, @RequestBody @Valid IncomeFormUpdate form){
+		
+		Optional<Income> income = incomeRepository.findById(id);
+		
+		if(income.isPresent()) {
+			Income incomeUpdateData = form.update(id,incomeRepository);
+			incomeRepository.save(incomeUpdateData);
+			return ResponseEntity.ok(new IncomeDto(incomeUpdateData));
+		}
 		return ResponseEntity.notFound().build();
 	}
 	
