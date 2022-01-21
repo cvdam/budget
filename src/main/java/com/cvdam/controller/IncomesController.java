@@ -43,7 +43,7 @@ public class IncomesController {
 		if (income == null) {
 			//return ResponseEntity.status(HttpStatus.CONFLICT.build();
 			throw new ResponseStatusException(
-			          HttpStatus.CONFLICT, "Resource already exixts for the current month and year.", null);
+			          HttpStatus.CONFLICT, "Income resource already exixts for the current month and year.", null);
 		}
 		
 		incomeRepository.save(income);

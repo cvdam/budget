@@ -15,14 +15,13 @@ public class Expenditure {
 	private Long id;
 	private String description;
 	private BigDecimal value;
-	private LocalDateTime registrationDate = LocalDateTime.now();
+	private LocalDateTime createDate = LocalDateTime.now();
 	
 	public Expenditure() {}
 	
-	public Expenditure(String description, BigDecimal value, LocalDateTime registrationDate) {
+	public Expenditure(String description , BigDecimal value) {
 		this.description = description;
 		this.value = value;
-		this.registrationDate = registrationDate;
 	}
 	
 	public Long getId() {
@@ -43,11 +42,11 @@ public class Expenditure {
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
-	public LocalDateTime getRegistrationDate() {
-		return registrationDate;
+	public LocalDateTime getCreateDate() {
+		return createDate ;
 	}
-	public void setRegistrationDate(LocalDateTime registrationDate) {
-		this.registrationDate = registrationDate;
+	public void setCreateDate(LocalDateTime createDate ) {
+		this.createDate  = createDate;
 	}
 
 }

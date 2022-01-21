@@ -1,1 +1,2 @@
-INSERT INTO INCOME(description,create_date, value) values ('test','2022-01-01 19:00:00', '12345')
+INSERT INTO INCOME(description,create_date, value) values ('Income test','2022-01-01 19:00:00', '12345.00')
+INSERT INTO EXPENDITURE(description,create_date, value) values ('Expenditure test','2022-01-01 19:00:00', '54321.00')

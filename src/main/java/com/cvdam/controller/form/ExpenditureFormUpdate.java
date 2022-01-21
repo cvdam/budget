@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.cvdam.model.Income;
-import com.cvdam.repository.IncomeRepository;
+import com.cvdam.model.Expenditure;
+import com.cvdam.repository.ExpenditureRepository;
 
-public class IncomeFormUpdate {
+public class ExpenditureFormUpdate {
 	
 	@NotNull @NotEmpty
 	private String description;
@@ -32,11 +32,12 @@ public class IncomeFormUpdate {
 		this.value = value;
 	}
 
-	public Income update(Long id, IncomeRepository incomeRepository) {
+	public Expenditure update(Long id, ExpenditureRepository expenditureRepository) {
 		
-		Income income = incomeRepository.getById(id);
-		income.setDescription(this.description);
-		income.setValue(this.value);
-		return income;
+		Expenditure expenditure = expenditureRepository.getById(id);
+		expenditure.setDescription(this.description);
+		expenditure.setValue(this.value);
+		return expenditure;
 	}
+
 }

@@ -5,10 +5,10 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cvdam.model.Income;
+import com.cvdam.model.Expenditure;
 
-public interface IncomeRepository extends JpaRepository<Income, Long> {
+public interface ExpenditureRepository extends JpaRepository<Expenditure, Long>{
 
-	Income findByDescription(@NotNull @NotEmpty String description);
+	Expenditure findByDescription(@NotNull @NotEmpty String description);
 
 }
