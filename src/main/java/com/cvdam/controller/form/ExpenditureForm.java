@@ -44,7 +44,7 @@ public class ExpenditureForm {
 	}
 	
 	public Expenditure convert(ExpenditureRepository expenditureRepository) {
-		Expenditure expenditure = expenditureRepository.findByDescription(description);
+		Expenditure expenditure = expenditureRepository.findByDescriptionIgnoreCase(description);
 
 		if (expenditure == null) {
 			return new Expenditure(description, value);

@@ -45,7 +45,7 @@ public class IncomeForm {
 	}
 	
 	public Income convert(IncomeRepository incomeRepository) {
-		Income income = incomeRepository.findByDescription(description);
+		Income income = incomeRepository.findByDescriptionIgnoreCase(description);
 
 		if (income == null) {
 			return new Income(description, value);

@@ -9,6 +9,6 @@ import com.cvdam.model.Expenditure;
 
 public interface ExpenditureRepository extends JpaRepository<Expenditure, Long>{
 
-	Expenditure findByDescription(@NotNull @NotEmpty String description);
+	Expenditure findByDescriptionIgnoreCase(@NotNull @NotEmpty String description);
 
 }

@@ -9,6 +9,6 @@ import com.cvdam.model.Income;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-	Income findByDescription(@NotNull @NotEmpty String description);
+	Income findByDescriptionIgnoreCase(@NotNull @NotEmpty String description);
 
 }
