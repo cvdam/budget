@@ -1,2 +1,2 @@
 # Budget
- Simple Api for budget management.
+ Simple Api for personal budget management.
