@@ -25,6 +25,7 @@ import com.cvdam.controller.dto.ExpenditureDto;
 import com.cvdam.controller.form.ExpenditureForm;
 import com.cvdam.controller.form.ExpenditureFormUpdate;
 import com.cvdam.model.Expenditure;
+import com.cvdam.repository.CategoryRepository;
 import com.cvdam.repository.ExpenditureRepository;
 
 @RestController
@@ -34,11 +35,14 @@ public class ExpendituresController {
 	@Autowired
 	private ExpenditureRepository expenditureRepository;
 	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<ExpenditureDto> createExpenditure(@RequestBody @Valid ExpenditureForm form, UriComponentsBuilder uriBuilder){
 		
-		Expenditure expenditure = form.convert(expenditureRepository);
+		Expenditure expenditure = form.convert(expenditureRepository, categoryRepository);
 		
 		if (expenditure == null) {
 			throw new ResponseStatusException(

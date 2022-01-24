@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Expenditure {
@@ -16,12 +17,17 @@ public class Expenditure {
 	private String description;
 	private BigDecimal value;
 	private LocalDateTime createDate = LocalDateTime.now();
+
+	@ManyToOne
+	private Category category;
+	
 	
 	public Expenditure() {}
 	
-	public Expenditure(String description , BigDecimal value) {
+	public Expenditure(String description , BigDecimal value, Category category) {
 		this.description = description;
 		this.value = value;
+		this.category = category;
 	}
 	
 	public Long getId() {
@@ -47,6 +53,13 @@ public class Expenditure {
 	}
 	public void setCreateDate(LocalDateTime createDate ) {
 		this.createDate  = createDate;
+	}
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 }

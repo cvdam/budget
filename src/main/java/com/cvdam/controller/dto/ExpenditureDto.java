@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cvdam.model.Category;
 import com.cvdam.model.Expenditure;
 
 public class ExpenditureDto {
@@ -12,12 +13,14 @@ public class ExpenditureDto {
 	private String description;
 	private BigDecimal value;
 	private LocalDateTime createDate = LocalDateTime.now();
+	private Category category;
 	
 	public ExpenditureDto(Expenditure expenditure) {
 		this.id = expenditure.getId();
 		this.description = expenditure.getDescription();
 		this.value = expenditure.getValue();
 		this.createDate = expenditure.getCreateDate();
+		this.category = expenditure.getCategory();
 	}
 
 	public Long getId() {
@@ -56,4 +59,12 @@ public class ExpenditureDto {
 		
 		return expenditures.stream().map(ExpenditureDto::new).collect(Collectors.toList());
 	}	
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 }
