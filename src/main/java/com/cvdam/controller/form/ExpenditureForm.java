@@ -1,7 +1,12 @@
 package com.cvdam.controller.form;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,7 +24,7 @@ public class ExpenditureForm {
 	
 	@NotNull
 	private BigDecimal value;
-	private LocalDateTime createDate = LocalDateTime.now();
+	private LocalDate createDate = LocalDate.now();
 	private Category category;
 
 
@@ -39,11 +44,11 @@ public class ExpenditureForm {
 		this.value = value;
 	}
 
-	public LocalDateTime getCreateDate() {
+	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
 	
@@ -56,25 +61,33 @@ public class ExpenditureForm {
 	}
 	
 	public Expenditure convert(ExpenditureRepository expenditureRepository, CategoryRepository categoryRepository) {
+		         	
+		List<Expenditure> expenditures = expenditureRepository.findByDescriptionIgnoreCase(description);
 		
 	    if (category == null) {
 	    	category = categoryRepository.findByName("others"); 
 	    }
-         	
-		Expenditure expenditure = expenditureRepository.findByDescriptionIgnoreCase(description);
 		
-		if (expenditure == null) {
-			return new Expenditure(description, value,category);
+		if (expenditures == null | expenditures.isEmpty()  ) {
+			return new Expenditure(description, value, category);
 		}else {
-			LocalDateTime dateNow = LocalDateTime.now();
-			if (expenditure.getCreateDate().getMonth().equals(dateNow.getMonth())
-					&& dateNow.getYear() == expenditure.getCreateDate().getYear()) {
-				return null;	
-				
-			}else {
-		
-				return new Expenditure(description, value,category);
+			
+			Collections.sort(expenditures, (a,b)->a.getCreateDate().compareTo(b.getCreateDate()));
+			Collections.reverse(expenditures);
+			
+			LocalDate dateNow = LocalDate.now();
+			Calendar cal1 = Calendar.getInstance();
+			Calendar cal2 = Calendar.getInstance();
+
+			cal1.setTime(Date.from(dateNow.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			cal2.setTime(Date.from(expenditures.get(0).getCreateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			
+			if(cal1.get(Calendar.YEAR) >= cal2.get(Calendar.YEAR)) {
+			    if(cal1.get(Calendar.MONTH) > cal2.get(Calendar.MONTH)) {
+			    	return new Expenditure(description, value, category);
+			    }
 			}
+			return null;
 		}
 		
 	}

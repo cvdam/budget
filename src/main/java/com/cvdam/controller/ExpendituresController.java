@@ -56,9 +56,14 @@ public class ExpendituresController {
 	}
 	
 	@GetMapping
-	public List<ExpenditureDto> readAllExpenditures(){
-		List<Expenditure> expenditures = expenditureRepository.findAll();
-		return ExpenditureDto.convert(expenditures);
+	public List<ExpenditureDto> readExpenditures(String description) {
+		if (description == null) {
+			List<Expenditure> expenditures = expenditureRepository.findAll();
+			return ExpenditureDto.convert(expenditures);
+		} else {
+			List<Expenditure> expenditures = expenditureRepository.findByDescriptionIgnoreCase(description);
+			return ExpenditureDto.convert(expenditures);
+		}
 	}
 	
 	

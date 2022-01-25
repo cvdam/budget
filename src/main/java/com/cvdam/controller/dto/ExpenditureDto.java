@@ -1,7 +1,7 @@
 package com.cvdam.controller.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +12,7 @@ public class ExpenditureDto {
 	private Long id;
 	private String description;
 	private BigDecimal value;
-	private LocalDateTime createDate = LocalDateTime.now();
+	private LocalDate createDate = LocalDate.now();
 	private Category category;
 	
 	public ExpenditureDto(Expenditure expenditure) {
@@ -47,18 +47,13 @@ public class ExpenditureDto {
 		this.value = value;
 	}
 
-	public LocalDateTime getCreateDate() {
+	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
-	
-	public static List<ExpenditureDto> convert(List<Expenditure> expenditures) {
-		
-		return expenditures.stream().map(ExpenditureDto::new).collect(Collectors.toList());
-	}	
 	
 	public Category getCategory() {
 		return category;
@@ -67,4 +62,9 @@ public class ExpenditureDto {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+	public static List<ExpenditureDto> convert(List<Expenditure> expenditures) {
+		
+		return expenditures.stream().map(ExpenditureDto::new).collect(Collectors.toList());
+	}	
 }

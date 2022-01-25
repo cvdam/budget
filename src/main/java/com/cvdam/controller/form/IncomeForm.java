@@ -50,9 +50,10 @@ public class IncomeForm {
 	}
 	
 	public Income convert(IncomeRepository incomeRepository) {
+		
 		List<Income> incomes = incomeRepository.findByDescriptionIgnoreCase(description);
 
-		if (incomes == null) {
+		if (incomes == null | incomes.isEmpty()) {
 			return new Income(description, value);
 		}else {			
 			
