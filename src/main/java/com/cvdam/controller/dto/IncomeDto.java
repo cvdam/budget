@@ -1,6 +1,7 @@
 package com.cvdam.controller.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ public class IncomeDto {
 	private Long id;
 	private String description;
 	private BigDecimal value;
-	private LocalDateTime createDate = LocalDateTime.now();
+	private LocalDate createDate = LocalDate.now();
 	
 	public IncomeDto(Income income) {
 		this.id = income.getId();
@@ -46,11 +47,11 @@ public class IncomeDto {
 		this.value = value;
 	}
 
-	public LocalDateTime getCreateDate() {
+	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
 	

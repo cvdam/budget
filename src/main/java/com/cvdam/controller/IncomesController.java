@@ -27,6 +27,7 @@ import com.cvdam.controller.form.IncomeFormUpdate;
 import com.cvdam.model.Income;
 import com.cvdam.repository.IncomeRepository;
 
+
 @RestController
 @RequestMapping("/incomes")
 public class IncomesController {
@@ -51,13 +52,7 @@ public class IncomesController {
 		URI uri = uriBuilder.path("/incomes/{id}").buildAndExpand(income.getId()).toUri();
 		return ResponseEntity.created(uri).body(new IncomeDto(income));
 	}
-	
-	@GetMapping
-	public List<IncomeDto> readAllIncomes(){
-		List<Income> incomes = incomeRepository.findAll();
-		return IncomeDto.convert(incomes);
-	}
-	
+		
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<IncomeDto> readIncome(@PathVariable Long id) {
@@ -69,6 +64,17 @@ public class IncomesController {
 		}
 		
 		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping
+	public List<IncomeDto> readIncomes(String description) {
+		if (description == null) {
+			List<Income> incomes = incomeRepository.findAll();
+			return IncomeDto.convert(incomes);
+		} else {
+			List<Income> incomes = incomeRepository.findByDescriptionIgnoreCase(description);
+			return IncomeDto.convert(incomes);
+		}
 	}
 	
 	@PutMapping("/{id}")
@@ -96,6 +102,5 @@ public class IncomesController {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
-	}
-	
+	}	
 }

@@ -1,7 +1,12 @@
 package com.cvdam.controller.form;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,7 +22,7 @@ public class IncomeForm {
 	
 	@NotNull
 	private BigDecimal value;
-	private LocalDateTime createDate = LocalDateTime.now();
+	private LocalDate createDate = LocalDate.now();
 
 
 	public String getDescription() {
@@ -36,31 +41,38 @@ public class IncomeForm {
 		this.value = value;
 	}
 
-	public LocalDateTime getCreateDate() {
+	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
 	
 	public Income convert(IncomeRepository incomeRepository) {
-		Income income = incomeRepository.findByDescriptionIgnoreCase(description);
+		List<Income> incomes = incomeRepository.findByDescriptionIgnoreCase(description);
 
-		if (income == null) {
+		if (incomes == null) {
 			return new Income(description, value);
-		}else {
-			LocalDateTime dateNow = LocalDateTime.now();
-			if (income.getCreateDate().getMonth().equals(dateNow.getMonth())
-					&& dateNow.getYear() == income.getCreateDate().getYear()) {
-				return null;	
-				
-			}else {
-		
-				return new Income(description, value);
+		}else {			
+			
+			Collections.sort(incomes, (a,b)->a.getCreateDate().compareTo(b.getCreateDate()));
+			Collections.reverse(incomes);
+			
+			LocalDate dateNow = LocalDate.now();
+			Calendar cal1 = Calendar.getInstance();
+			Calendar cal2 = Calendar.getInstance();
+
+			cal1.setTime(Date.from(dateNow.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			cal2.setTime(Date.from(incomes.get(0).getCreateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			
+			if(cal1.get(Calendar.YEAR) >= cal2.get(Calendar.YEAR)) {
+			    if(cal1.get(Calendar.MONTH) > cal2.get(Calendar.MONTH)) {
+			    	return new Income(description, value);
+			    }
 			}
-		}
+			return null;
+		}		
 		
 	}
-
 }

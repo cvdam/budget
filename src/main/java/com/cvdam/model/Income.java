@@ -1,7 +1,7 @@
 package com.cvdam.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ public class Income {
 	private Long id;
 	private String description;
 	private BigDecimal value;
-	private LocalDateTime createDate = LocalDateTime.now();
+	private LocalDate createDate = LocalDate.now();
 	
 	public Income() {}
 	
@@ -43,11 +43,11 @@ public class Income {
 		this.value = value;
 	}
 
-	public LocalDateTime getCreateDate() {
+	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
 
