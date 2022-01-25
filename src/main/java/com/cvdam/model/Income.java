@@ -3,18 +3,23 @@ package com.cvdam.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "income")
 public class Income {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String description;
 	private BigDecimal value;
+	
+	@Column(name = "create_date", columnDefinition = "DATE")
 	private LocalDate createDate = LocalDate.now();
 	
 	public Income() {}
@@ -50,9 +55,5 @@ public class Income {
 	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
-
-
-	
-	
 
 }

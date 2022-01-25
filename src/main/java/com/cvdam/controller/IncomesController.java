@@ -1,6 +1,7 @@
 package com.cvdam.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,22 @@ public class IncomesController {
 		}
 		
 		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/{year}/{month}")
+	public List<IncomeDto> readExpenditureByDate(@PathVariable Integer year, @PathVariable Integer month){
+		
+		LocalDate inputDate = LocalDate.of(year, month, 1);
+        LocalDate startDate = inputDate.withDayOfMonth(1);
+        LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
+		
+		List<Income> incomes = incomeRepository.findByCreateDate(startDate, endDate);
+		
+		if (incomes == null | incomes.isEmpty()) {
+			throw new ResponseStatusException(
+			          HttpStatus.NOT_FOUND, "Resources not found in the specified year and month", null);
+		}
+		return IncomeDto.convert(incomes);
 	}
 	
 	@GetMapping

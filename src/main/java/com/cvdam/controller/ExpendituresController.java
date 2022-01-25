@@ -66,7 +66,6 @@ public class ExpendituresController {
 		}
 	}
 	
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<ExpenditureDto> readExpenditure(@PathVariable Long id) {
 		
@@ -78,7 +77,7 @@ public class ExpendituresController {
 		
 		return ResponseEntity.notFound().build();
 	}
-	
+		
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<ExpenditureDto> updateExpenditure(@PathVariable Long id, @RequestBody @Valid ExpenditureFormUpdate form){

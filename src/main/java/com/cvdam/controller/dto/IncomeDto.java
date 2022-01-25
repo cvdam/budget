@@ -55,7 +55,6 @@ public class IncomeDto {
 	}
 	
 	public static List<IncomeDto> convert(List<Income> incomes) {
-		
 		return incomes.stream().map(IncomeDto::new).collect(Collectors.toList());
 	}	
 
