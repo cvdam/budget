@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.cvdam.model.Category;
 import com.cvdam.model.Expenditure;
+import com.cvdam.repository.CategoryRepository;
 import com.cvdam.repository.ExpenditureRepository;
 
 public class ExpenditureFormUpdate {
@@ -15,6 +17,16 @@ public class ExpenditureFormUpdate {
 	
 	@NotNull
 	private BigDecimal value;
+	
+	private Category category;
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
 	public String getDescription() {
 		return description;
@@ -32,11 +44,16 @@ public class ExpenditureFormUpdate {
 		this.value = value;
 	}
 
-	public Expenditure update(Long id, ExpenditureRepository expenditureRepository) {
+	public Expenditure update(Long id, ExpenditureRepository expenditureRepository, CategoryRepository categoryRepository) {
 		
+	    if (category == null) {
+	    	category = categoryRepository.findByName("others"); 
+	    }
+	    
 		Expenditure expenditure = expenditureRepository.getById(id);
 		expenditure.setDescription(this.description);
 		expenditure.setValue(this.value);
+		expenditure.setCategory(this.category);
 		return expenditure;
 	}
 

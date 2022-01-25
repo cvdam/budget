@@ -55,8 +55,7 @@ public class ExpenditureForm {
 		this.category = category;
 	}
 	
-	public Expenditure convert(ExpenditureRepository expenditureRepository,
-			CategoryRepository categoryRepository) {
+	public Expenditure convert(ExpenditureRepository expenditureRepository, CategoryRepository categoryRepository) {
 		
 	    if (category == null) {
 	    	category = categoryRepository.findByName("others"); 

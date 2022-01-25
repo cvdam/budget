@@ -81,7 +81,7 @@ public class ExpendituresController {
 		Optional<Expenditure> expenditure = expenditureRepository.findById(id);
 		
 		if(expenditure.isPresent()) {
-			Expenditure expenditureUpdateData = form.update(id,expenditureRepository);
+			Expenditure expenditureUpdateData = form.update(id,expenditureRepository, categoryRepository);
 			expenditureRepository.save(expenditureUpdateData);
 			return ResponseEntity.ok(new ExpenditureDto(expenditureUpdateData));
 		}
