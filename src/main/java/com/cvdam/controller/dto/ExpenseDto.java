@@ -6,21 +6,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cvdam.model.Category;
-import com.cvdam.model.Expenditure;
+import com.cvdam.model.Expense;
 
-public class ExpenditureDto {
+public class ExpenseDto {
 	private Long id;
 	private String description;
 	private BigDecimal value;
 	private LocalDate createDate = LocalDate.now();
 	private Category category;
 	
-	public ExpenditureDto(Expenditure expenditure) {
-		this.id = expenditure.getId();
-		this.description = expenditure.getDescription();
-		this.value = expenditure.getValue();
-		this.createDate = expenditure.getCreateDate();
-		this.category = expenditure.getCategory();
+	public ExpenseDto(Expense expense) {
+		this.id = expense.getId();
+		this.description = expense.getDescription();
+		this.value = expense.getValue();
+		this.createDate = expense.getCreateDate();
+		this.category = expense.getCategory();
 	}
 
 	public Long getId() {
@@ -63,7 +63,7 @@ public class ExpenditureDto {
 		this.category = category;
 	}
 	
-	public static List<ExpenditureDto> convert(List<Expenditure> expenditures) {
-		return expenditures.stream().map(ExpenditureDto::new).collect(Collectors.toList());
+	public static List<ExpenseDto> convert(List<Expense> expenses) {
+		return expenses.stream().map(ExpenseDto::new).collect(Collectors.toList());
 	}	
 }

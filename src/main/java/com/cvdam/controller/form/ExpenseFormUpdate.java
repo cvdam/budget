@@ -6,11 +6,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.cvdam.model.Category;
-import com.cvdam.model.Expenditure;
+import com.cvdam.model.Expense;
 import com.cvdam.repository.CategoryRepository;
-import com.cvdam.repository.ExpenditureRepository;
+import com.cvdam.repository.ExpenseRepository;
 
-public class ExpenditureFormUpdate {
+public class ExpenseFormUpdate {
 	
 	@NotNull @NotEmpty
 	private String description;
@@ -44,13 +44,13 @@ public class ExpenditureFormUpdate {
 		this.value = value;
 	}
 
-	public Expenditure update(Long id, ExpenditureRepository expenditureRepository, CategoryRepository categoryRepository) {
+	public Expense update(Long id, ExpenseRepository expenseRepository, CategoryRepository categoryRepository) {
 		
 	    if (category == null) {
 	    	category = categoryRepository.findByName("others"); 
 	    }
 	    
-		Expenditure expenditure = expenditureRepository.getById(id);
+		Expense expenditure = expenseRepository.getById(id);
 		expenditure.setDescription(this.description);
 		expenditure.setValue(this.value);
 		expenditure.setCategory(this.category);

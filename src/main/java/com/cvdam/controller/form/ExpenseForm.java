@@ -12,11 +12,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.cvdam.model.Category;
-import com.cvdam.model.Expenditure;
+import com.cvdam.model.Expense;
 import com.cvdam.repository.CategoryRepository;
-import com.cvdam.repository.ExpenditureRepository;
+import com.cvdam.repository.ExpenseRepository;
 
-public class ExpenditureForm {
+public class ExpenseForm {
 	
 	
 	@NotNull @NotEmpty
@@ -60,31 +60,31 @@ public class ExpenditureForm {
 		this.category = category;
 	}
 	
-	public Expenditure convert(ExpenditureRepository expenditureRepository, CategoryRepository categoryRepository) {
+	public Expense convert(ExpenseRepository expenseRepository, CategoryRepository categoryRepository) {
 		         	
-		List<Expenditure> expenditures = expenditureRepository.findByDescriptionIgnoreCase(description);
+		List<Expense> expenses = expenseRepository.findByDescriptionIgnoreCase(description);
 		
 	    if (category == null) {
 	    	category = categoryRepository.findByName("others"); 
 	    }
 		
-		if (expenditures == null | expenditures.isEmpty()  ) {
-			return new Expenditure(description, value, category);
+		if (expenses == null | expenses.isEmpty()  ) {
+			return new Expense(description, value, category);
 		}else {
 			
-			Collections.sort(expenditures, (a,b)->a.getCreateDate().compareTo(b.getCreateDate()));
-			Collections.reverse(expenditures);
+			Collections.sort(expenses, (a,b)->a.getCreateDate().compareTo(b.getCreateDate()));
+			Collections.reverse(expenses);
 			
 			LocalDate dateNow = LocalDate.now();
-			Calendar cal1 = Calendar.getInstance();
-			Calendar cal2 = Calendar.getInstance();
+			Calendar calendarDateNow = Calendar.getInstance();
+			Calendar calendarFromResource = Calendar.getInstance();
 
-			cal1.setTime(Date.from(dateNow.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-			cal2.setTime(Date.from(expenditures.get(0).getCreateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			calendarDateNow.setTime(Date.from(dateNow.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			calendarFromResource.setTime(Date.from(expenses.get(0).getCreateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			
-			if(cal1.get(Calendar.YEAR) >= cal2.get(Calendar.YEAR)) {
-			    if(cal1.get(Calendar.MONTH) > cal2.get(Calendar.MONTH)) {
-			    	return new Expenditure(description, value, category);
+			if(calendarDateNow.get(Calendar.YEAR) >= calendarFromResource.get(Calendar.YEAR)) {
+			    if(calendarDateNow.get(Calendar.MONTH) > calendarFromResource.get(Calendar.MONTH)) {
+			    	return new Expense(description, value, category);
 			    }
 			}
 			return null;

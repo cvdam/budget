@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Expenditure {
+public class Expense {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -22,9 +22,9 @@ public class Expenditure {
 	private Category category;
 	
 	
-	public Expenditure() {}
+	public Expense() {}
 	
-	public Expenditure(String description , BigDecimal value, Category category) {
+	public Expense(String description , BigDecimal value, Category category) {
 		this.description = description;
 		this.value = value;
 		this.category = category;
