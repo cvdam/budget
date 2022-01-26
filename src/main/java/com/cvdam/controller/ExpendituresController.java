@@ -1,6 +1,7 @@
 package com.cvdam.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class ExpendituresController {
 		
 		if (expenditure == null) {
 			throw new ResponseStatusException(
-			          HttpStatus.CONFLICT, "Expenditure resource already exixts for the current month and year.", null);
+			          HttpStatus.CONFLICT, "Expenditure resource already exists for the current month and year.", null);
 		}
 		
 		expenditureRepository.save(expenditure);
@@ -76,6 +77,22 @@ public class ExpendituresController {
 		}
 		
 		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/{year}/{month}")
+	public List<ExpenditureDto> readExpenditureByDate(@PathVariable Integer year, @PathVariable Integer month){
+		
+		LocalDate inputDate = LocalDate.of(year, month, 1);
+		LocalDate startDate = inputDate.withDayOfMonth(1);
+		LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
+		
+		List<Expenditure> expenditures = expenditureRepository.findByCreateDate(startDate, endDate);
+		
+		if (expenditures == null | expenditures.isEmpty()) {
+			throw new ResponseStatusException(
+			          HttpStatus.NOT_FOUND, "Expenditures resources not found in the specified year and month", null);
+		}
+		return ExpenditureDto.convert(expenditures);
 	}
 		
 	@PutMapping("/{id}")

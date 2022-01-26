@@ -45,7 +45,7 @@ public class IncomesController {
 		if (income == null) {
 			//return ResponseEntity.status(HttpStatus.CONFLICT.build();
 			throw new ResponseStatusException(
-			          HttpStatus.CONFLICT, "Income resource already exixts for the current month and year.", null);
+			          HttpStatus.CONFLICT, "Income resource already exists for the current month and year.", null);
 		}
 		
 		incomeRepository.save(income);
@@ -68,17 +68,17 @@ public class IncomesController {
 	}
 	
 	@GetMapping("/{year}/{month}")
-	public List<IncomeDto> readExpenditureByDate(@PathVariable Integer year, @PathVariable Integer month){
+	public List<IncomeDto> readIncomeByDate(@PathVariable Integer year, @PathVariable Integer month){
 		
 		LocalDate inputDate = LocalDate.of(year, month, 1);
-        LocalDate startDate = inputDate.withDayOfMonth(1);
-        LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
+		LocalDate startDate = inputDate.withDayOfMonth(1);
+		LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
 		
 		List<Income> incomes = incomeRepository.findByCreateDate(startDate, endDate);
 		
 		if (incomes == null | incomes.isEmpty()) {
 			throw new ResponseStatusException(
-			          HttpStatus.NOT_FOUND, "Resources not found in the specified year and month", null);
+			          HttpStatus.NOT_FOUND, "Income resources not found in the specified year and month", null);
 		}
 		return IncomeDto.convert(incomes);
 	}

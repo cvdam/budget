@@ -64,7 +64,6 @@ public class ExpenditureDto {
 	}
 	
 	public static List<ExpenditureDto> convert(List<Expenditure> expenditures) {
-		
 		return expenditures.stream().map(ExpenditureDto::new).collect(Collectors.toList());
 	}	
 }
