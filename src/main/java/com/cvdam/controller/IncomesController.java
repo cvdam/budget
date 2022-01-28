@@ -1,7 +1,6 @@
 package com.cvdam.controller;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,12 +68,8 @@ public class IncomesController {
 	
 	@GetMapping("/{year}/{month}")
 	public List<IncomeDto> readIncomeByDate(@PathVariable Integer year, @PathVariable Integer month){
-		
-		LocalDate inputDate = LocalDate.of(year, month, 1);
-		LocalDate startDate = inputDate.withDayOfMonth(1);
-		LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
-		
-		List<Income> incomes = incomeRepository.findByCreateDate(startDate, endDate);
+				
+		List<Income> incomes = incomeRepository.findByCreateDate(year, month);
 		
 		if (incomes == null | incomes.isEmpty()) {
 			throw new ResponseStatusException(

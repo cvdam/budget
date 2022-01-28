@@ -1,7 +1,6 @@
 package com.cvdam.controller;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +32,10 @@ public class SummaryController {
 		
 	@GetMapping("/{year}/{month}")
 	public Summary generateSummary(@PathVariable Integer year, @PathVariable Integer month){
-		
-		LocalDate inputDate = LocalDate.of(year, month, 1);
-		LocalDate startDate = inputDate.withDayOfMonth(1);
-		LocalDate endDate = inputDate.withDayOfMonth(inputDate.lengthOfMonth());
-		
-		BigDecimal totalIncomes = incomeRepository.findTotalIncomesByDate(startDate, endDate);
-		BigDecimal totalExpenses = expenseRepository.findTotalExpensesByDate(startDate, endDate);
-		List<CategorySummary> expensesByCategory = expenseRepository.findTotalExpensesByCategory(startDate, endDate);
+				
+		BigDecimal totalIncomes = incomeRepository.findTotalIncomesByDate(year, month);
+		BigDecimal totalExpenses = expenseRepository.findTotalExpensesByDate(year, month);
+		List<CategorySummary> expensesByCategory = expenseRepository.findTotalExpensesByCategory(year, month);
 
 		List<Category> categories = categoryRepository.findAll();
 		List<CategorySummary> summaryCategoriesResults = new ArrayList<>();
@@ -54,9 +49,8 @@ public class SummaryController {
 			}
 		}
 		
-		BigDecimal bd = new BigDecimal(0);
 		for(int c =0 ; c< categories.size(); c++) {
-			CategorySummary cs = new CategorySummary(categories.get(c).getName(), bd);
+			CategorySummary cs = new CategorySummary(categories.get(c).getName(), BigDecimal.ZERO);
 			summaryCategoriesResults.add(cs);
 		}
 		

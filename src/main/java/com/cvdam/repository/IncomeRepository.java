@@ -1,7 +1,6 @@
 package com.cvdam.repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,9 +12,9 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
 	List<Income> findByDescriptionIgnoreCase(String description);
 
-    @Query(value = "select i from Income i where i.createDate between ?1 and ?2")
-    List<Income> findByCreateDate(LocalDate startDate, LocalDate endDate);
+    @Query(value = "select i from Income i where YEAR(i.createDate) = ?1 AND MONTH(i.createDate) = ?2")
+    List<Income> findByCreateDate(Integer year, Integer month);
 
-	@Query(value = "select SUM(i.value) from Income i where i.createDate between ?1 and ?2")
-	BigDecimal findTotalIncomesByDate(LocalDate startDate, LocalDate endDate);
+	@Query(value = "select SUM(i.value) from Income i where YEAR(i.createDate) = ?1 AND MONTH(i.createDate) = ?2")
+	BigDecimal findTotalIncomesByDate(Integer year, Integer month);
 }
