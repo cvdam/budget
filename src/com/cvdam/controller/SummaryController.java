@@ -42,7 +42,7 @@ public class SummaryController {
 		
 		for(int i =0 ; i< categories.size(); i++) {
 			for(int j = 0; j <expensesByCategory.size(); j++) {
-				if (categories.get(i).getName().equals(expensesByCategory.get(j).getName())) {
+				if (categories.get(i).getName().equals(expensesByCategory.get(j).getCategory().getName())) {
 					summaryCategoriesResults.add(expensesByCategory.get(j));
 					categories.remove(i);
 				}
@@ -50,7 +50,7 @@ public class SummaryController {
 		}
 		
 		for(int c =0 ; c< categories.size(); c++) {
-			CategorySummary cs = new CategorySummary(categories.get(c).getName(), BigDecimal.ZERO);
+			CategorySummary cs = new CategorySummary(categories.get(c), BigDecimal.ZERO);
 			summaryCategoriesResults.add(cs);
 		}
 		

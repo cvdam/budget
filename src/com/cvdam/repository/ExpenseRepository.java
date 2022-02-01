@@ -21,7 +21,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>{
 	@Query(value = "SELECT SUM(e.value) FROM Expense e WHERE YEAR(e.createDate) =?1 AND MONTH(e.createDate) = ?2")
 	BigDecimal findTotalExpensesByDate(Integer year, Integer month);
 
-	@Query(value="SELECT new com.cvdam.reports.CategorySummary(c.name as name, SUM(e.value) AS total) FROM Expense AS e JOIN e.category AS c WHERE YEAR(e.createDate) =?1 AND MONTH(e.createDate) = ?2  GROUP BY c.name ")
+	@Query(value="SELECT new com.cvdam.reports.CategorySummary(e.category as name, SUM(e.value)) FROM Expense AS e  WHERE YEAR(e.createDate) =?1 AND MONTH(e.createDate) = ?2 GROUP BY e.category ")
 	List<CategorySummary> findTotalExpensesByCategory(Integer year, Integer month);
 
 }
