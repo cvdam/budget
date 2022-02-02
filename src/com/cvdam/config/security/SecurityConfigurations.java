@@ -54,10 +54,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		.and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	
-	//Statics resources (javascript, css, images, etc)
+	//Statics resources (javascript, css, images, html, swagger, etc)
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configurations/**", "/swagger-resources/**");
 	}
 	
 	//Generate hash password for test p
