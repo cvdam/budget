@@ -42,75 +42,75 @@ public class ExpensesController {
 	@Transactional
 	public ResponseEntity<ExpenseDto> createExpense(@RequestBody @Valid ExpenseForm form, UriComponentsBuilder uriBuilder){
 		
-		Expense expenditure = form.convert(expenseRepository, categoryRepository);
+		Expense expense = form.convert(expenseRepository, categoryRepository);
 		
-		if (expenditure == null) {
+		if (expense == null) {
 			throw new ResponseStatusException(
 			          HttpStatus.CONFLICT, "Expense resource already exists for the current month and year.", null);
 		}
 		
-		expenseRepository.save(expenditure);
+		expenseRepository.save(expense);
 		
-		URI uri = uriBuilder.path("/incomes/{id}").buildAndExpand(expenditure.getId()).toUri();
-		return ResponseEntity.created(uri).body(new ExpenseDto(expenditure));
+		URI uri = uriBuilder.path("/incomes/{id}").buildAndExpand(expense.getId()).toUri();
+		return ResponseEntity.created(uri).body(new ExpenseDto(expense));
 	}
 	
 	@GetMapping
-	public List<ExpenseDto> readExpenditures(String description) {
+	public List<ExpenseDto> readExpenses(String description) {
 		if (description == null) {
-			List<Expense> expenditures = expenseRepository.findAll();
-			return ExpenseDto.convert(expenditures);
+			List<Expense> expenses = expenseRepository.findAll();
+			return ExpenseDto.convert(expenses);
 		} else {
-			List<Expense> expenditures = expenseRepository.findByDescriptionIgnoreCase(description);
-			return ExpenseDto.convert(expenditures);
+			List<Expense> expenses = expenseRepository.findByDescriptionIgnoreCase(description);
+			return ExpenseDto.convert(expenses);
 		}
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ExpenseDto> readExpenditure(@PathVariable Long id) {
+	public ResponseEntity<ExpenseDto> readExpense(@PathVariable Long id) {
 		
-		Optional<Expense> expenditure = expenseRepository.findById(id);
+		Optional<Expense> expense = expenseRepository.findById(id);
 		
-		if (expenditure.isPresent()) {
-			return ResponseEntity.ok(new ExpenseDto(expenditure.get()));
+		if (expense.isPresent()) {
+			return ResponseEntity.ok(new ExpenseDto(expense.get()));
 		}
 		
 		return ResponseEntity.notFound().build();
 	}
 	
 	@GetMapping("/{year}/{month}")
-	public List<ExpenseDto> readExpenditureByDate(@PathVariable Integer year, @PathVariable Integer month){
+	public List<ExpenseDto> readExpenseByDate(@PathVariable Integer year, @PathVariable Integer month){
 				
-		List<Expense> expenditures = expenseRepository.findByCreateDate(year, month);
+		List<Expense> expenses = expenseRepository.findByCreateDate(year, month);
 		
-		if (expenditures == null | expenditures.isEmpty()) {
+		if (expenses == null | expenses.isEmpty()) {
 			throw new ResponseStatusException(
 			          HttpStatus.NOT_FOUND, "Expense resources not found in the specified year and month", null);
 		}
-		return ExpenseDto.convert(expenditures);
+		return ExpenseDto.convert(expenses);
 	}
 		
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ExpenseDto> updateExpenditure(@PathVariable Long id, @RequestBody @Valid ExpenseFormUpdate form){
+	public ResponseEntity<ExpenseDto> updateExpense(@PathVariable Long id, @RequestBody @Valid ExpenseFormUpdate form){
 		
-		Optional<Expense> expenditure = expenseRepository.findById(id);
+		Optional<Expense> expense = expenseRepository.findById(id);
 		
-		if(expenditure.isPresent()) {
-			Expense expenditureUpdateData = form.update(id,expenseRepository, categoryRepository);
-			expenseRepository.save(expenditureUpdateData);
-			return ResponseEntity.ok(new ExpenseDto(expenditureUpdateData));
+		if(expense.isPresent()) {
+			Expense expenseUpdateData = form.update(id,expenseRepository, categoryRepository);
+			expenseRepository.save(expenseUpdateData);
+			return ResponseEntity.ok(new ExpenseDto(expenseUpdateData));
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ExpenseDto> deleteExpenditure(@PathVariable Long id){
+	public ResponseEntity<ExpenseDto> deleteExpense(@PathVariable Long id){
 		
-		Optional<Expense> expenditure = expenseRepository.findById(id);
+		Optional<Expense> expense = expenseRepository.findById(id);
 		
-		if(expenditure.isPresent()) {
+		if(expense.isPresent()) {
 			expenseRepository.deleteById(id);
 			return ResponseEntity.ok().build();
 		}
