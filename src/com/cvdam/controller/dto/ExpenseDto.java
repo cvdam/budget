@@ -2,8 +2,8 @@ package com.cvdam.controller.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
 
 import com.cvdam.model.Category;
 import com.cvdam.model.Expense;
@@ -63,7 +63,8 @@ public class ExpenseDto {
 		this.category = category;
 	}
 	
-	public static List<ExpenseDto> convert(List<Expense> expenses) {
-		return expenses.stream().map(ExpenseDto::new).collect(Collectors.toList());
+	public static Page<ExpenseDto> convert(Page<Expense> expenses) {
+		//return expenses.stream().map(ExpenseDto::new).collect(Collectors.toList());
+		return expenses.map(ExpenseDto::new);
 	}	
 }

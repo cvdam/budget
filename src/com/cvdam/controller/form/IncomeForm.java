@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import com.cvdam.model.Income;
 import com.cvdam.repository.IncomeRepository;
 
-
 public class IncomeForm {
 	
 	@NotNull @NotEmpty
@@ -74,6 +73,5 @@ public class IncomeForm {
 			}
 			return null;
 		}		
-		
 	}
 }

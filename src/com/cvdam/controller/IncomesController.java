@@ -1,13 +1,18 @@
 package com.cvdam.controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,7 +33,6 @@ import com.cvdam.controller.form.IncomeFormUpdate;
 import com.cvdam.model.Income;
 import com.cvdam.repository.IncomeRepository;
 
-
 @RestController
 @RequestMapping("/incomes")
 public class IncomesController {
@@ -37,6 +42,7 @@ public class IncomesController {
 	
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "incomeslist", allEntries = true)
 	public ResponseEntity<IncomeDto> createIncome(@RequestBody @Valid IncomeForm form, UriComponentsBuilder uriBuilder){
 		
 		Income income = form.convert(incomeRepository);
@@ -67,9 +73,9 @@ public class IncomesController {
 	}
 	
 	@GetMapping("/{year}/{month}")
-	public List<IncomeDto> readIncomeByDate(@PathVariable Integer year, @PathVariable Integer month){
+	public Page<IncomeDto> readIncomeByDate(@PathVariable Integer year, @PathVariable Integer month, Pageable pages){
 				
-		List<Income> incomes = incomeRepository.findByCreateDate(year, month);
+		Page<Income> incomes = incomeRepository.findByCreateDate(year, month, pages);
 		
 		if (incomes == null | incomes.isEmpty()) {
 			throw new ResponseStatusException(
@@ -79,12 +85,15 @@ public class IncomesController {
 	}
 	
 	@GetMapping
-	public List<IncomeDto> readIncomes(String description) {
+	@Cacheable(value = "incomesList")
+	public Page<IncomeDto> readIncomes(@RequestParam(required = false) String description, 
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pages) {
+				
 		if (description == null) {
-			List<Income> incomes = incomeRepository.findAll();
+			Page<Income> incomes = incomeRepository.findAll(pages);
 			return IncomeDto.convert(incomes);
 		} else {
-			List<Income> incomes = incomeRepository.findByDescriptionIgnoreCase(description);
+			Page<Income> incomes = incomeRepository.findByDescriptionIgnoreCase(description, pages);
 			return IncomeDto.convert(incomes);
 		}
 	}
