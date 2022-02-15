@@ -2,8 +2,8 @@ package com.cvdam.controller.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
 
 import com.cvdam.model.Income;
 
@@ -54,8 +54,9 @@ public class IncomeDto {
 		this.createDate = createDate;
 	}
 	
-	public static List<IncomeDto> convert(List<Income> incomes) {
-		return incomes.stream().map(IncomeDto::new).collect(Collectors.toList());
+	public static Page<IncomeDto> convert(Page<Income> incomes) {
+		//return incomes.stream().map(IncomeDto::new).collect(Collectors.toList());
+		return incomes.map(IncomeDto::new);
 	}	
 
 }

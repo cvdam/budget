@@ -1,13 +1,17 @@
 package com.cvdam.controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -56,12 +61,14 @@ public class ExpensesController {
 	}
 	
 	@GetMapping
-	public List<ExpenseDto> readExpenses(String description) {
+	@Cacheable(value = "expensesList")
+	public Page<ExpenseDto> readExpenses(@RequestParam(required = false) String description, 
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pages) {
 		if (description == null) {
-			List<Expense> expenses = expenseRepository.findAll();
+			Page<Expense> expenses = expenseRepository.findAll(pages);
 			return ExpenseDto.convert(expenses);
 		} else {
-			List<Expense> expenses = expenseRepository.findByDescriptionIgnoreCase(description);
+			Page<Expense> expenses = expenseRepository.findByDescriptionIgnoreCase(description, pages);
 			return ExpenseDto.convert(expenses);
 		}
 	}
@@ -79,9 +86,9 @@ public class ExpensesController {
 	}
 	
 	@GetMapping("/{year}/{month}")
-	public List<ExpenseDto> readExpenseByDate(@PathVariable Integer year, @PathVariable Integer month){
+	public Page<ExpenseDto> readExpenseByDate(@PathVariable Integer year, @PathVariable Integer month, Pageable pages){
 				
-		List<Expense> expenses = expenseRepository.findByCreateDate(year, month);
+		Page<Expense> expenses = expenseRepository.findByCreateDate(year, month, pages);
 		
 		if (expenses == null | expenses.isEmpty()) {
 			throw new ResponseStatusException(
